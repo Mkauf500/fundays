@@ -44,10 +44,13 @@
       margin-top: 10px;
     }
     input[type="date"], input[type="text"] {
-      padding: 8px;
+      padding: 4px 6px;
       margin: 5px 0;
       border-radius: 5px;
       border: 1px solid #ccc;
+      text-align: left;
+      font-size: 16px;
+      width: 130px;
     }
     button {
       margin-top: 15px;
@@ -113,10 +116,10 @@
   <div class="container active" id="inputScreen">
     <h1>🐶 Puppy Age Match Calculator</h1>
     <label for="humanBirthday">Your Birthday:</label>
-    <input type="date" id="humanBirthday" />
+    <input type="text" id="humanBirthday" placeholder="MM/DD/YYYY" inputmode="numeric" pattern="\d{2}/\d{2}/\d{4}" />
 
     <label for="dogBirthday">Your Dog's Birthday:</label>
-    <input type="date" id="dogBirthday" />
+    <input type="text" id="dogBirthday" placeholder="MM/DD/YYYY" inputmode="numeric" pattern="\d{2}/\d{2}/\d{4}" />
 
     <button onclick="calculateSameAgeDay()">Find Our Same Age Day</button>
     <p style="margin-top: 10px; font-size: 14px; color: #555;">(Assuming 1 dog year = 7 human years)</p>
@@ -149,7 +152,13 @@
       errorEl.textContent = '';
 
       if (isNaN(humanDate) || isNaN(dogDate)) {
-        errorEl.textContent = 'Please enter both birthdays!';
+        errorEl.textContent = 'Please enter valid dates in MM/DD/YYYY format!';
+        return;
+      }
+
+      const isValidDate = d => d instanceof Date && !isNaN(d);
+      if (!isValidDate(humanDate) || !isValidDate(dogDate)) {
+        errorEl.textContent = 'C’mon enter valid dates in MM/DD/YYYY format.';
         return;
       } // keep function open
       const xTime = humanDate.getTime();
@@ -382,6 +391,23 @@ Calculated with PuppyAgeMatch 🐶`}`;
     }
 
     window.addEventListener('resize', resizeCanvas);
+    function autoFormatDate(input) {
+  input.addEventListener('input', () => {
+    let value = input.value.replace(/[^\d]/g, '');
+    if (value.length >= 5) {
+      input.value = `${value.slice(0, 2)}/${value.slice(2, 4)}/${value.slice(4, 8)}`;
+    } else if (value.length >= 3) {
+      input.value = `${value.slice(0, 2)}/${value.slice(2, 4)}`;
+    } else if (value.length >= 1) {
+      input.value = `${value.slice(0, 2)}`;
+    }
+  });
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  autoFormatDate(document.getElementById('humanBirthday'));
+  autoFormatDate(document.getElementById('dogBirthday'));
+});
   </script>
 <p style="font-size: 14px; color: #666; margin-top: 40px; text-align: center;">
   Created by Matthew 🐶<br>
