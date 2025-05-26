@@ -241,8 +241,8 @@
 
       const resultEl = document.getElementById('result');
       resultEl.innerHTML = `
-        <div class="result-text">🎉 You and your dog will be the same age on...</div>
-        <div class="result-date" style="font-weight: 800;">${dateText}</div>
+        <div class="result-text">You and your dog will be the same age on...</div>
+        <div class="result-date" style="font-weight: 800;">🎉${dateText}🎉</div>
         <div class="result-text" style="margin-top: 30px; font-size: 16px;">${ageDetails}</div>
         ${subMessage ? `<div class="result-text" style="margin: 40px 0 20px 0; font-size: 14px; color: #666; text-align: center;"><em>${subMessage}</em></div>` : ''}
       `;
@@ -334,6 +334,6 @@ Calculated with PuppyAgeMatch 🐶`;
     window.addEventListener('resize', resizeCanvas);
   </script>
 <p style="font-size: 14px; color: #666; margin-top: 40px; text-align: center;">
-  Created by Matthew – for Stiorra 🐶<br>
+  Created by Matthew 🐶<br>
 </p>
 </html>
