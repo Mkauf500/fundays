@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Puppy Age Match</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #fef8ef;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    input[type="date"] {
+      padding: 8px;
+      margin: 5px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      background-color: #ffa94d;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #ff922b;
+    }
+    .result {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>🐶 Puppy Age Match Calculator</h1>
+  <label for="humanBirthday">Your Birthday:</label>
+  <input type="date" id="humanBirthday" />
+
+  <label for="dogBirthday">Your Dog's Birthday:</label>
+  <input type="date" id="dogBirthday" />
+
+  <button onclick="calculateSameAgeDay()">Find Our Same Age Day</button>
+
+  <div class="result" id="result"></div>
+
+  <script>
+    function calculateSameAgeDay() {
+      const humanDate = new Date(document.getElementById('humanBirthday').value);
+      const dogDate = new Date(document.getElementById('dogBirthday').value);
+
+      if (isNaN(humanDate) || isNaN(dogDate)) {
+        document.getElementById('result').textContent = 'Please enter both dates!';
+        return;
+      }
+
+      // Find when dogAge * 7 = humanAge
+      let testDate = new Date(dogDate);
+
+      while (true) {
+        const dogAgeDays = (testDate - dogDate) / (1000 * 60 * 60 * 24);
+        const humanAgeDays = (testDate - humanDate) / (1000 * 60 * 60 * 24);
+
+        if (Math.abs(dogAgeDays * 7 - humanAgeDays) < 1) break;
+
+        testDate.setDate(testDate.getDate() + 1);
+      }
+
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      document.getElementById('result').textContent = `🎉 You and your dog will be the same age on ${testDate.toLocaleDateString(undefined, options)}!`;
+    }
+  </script>
+</body>
+</html>
