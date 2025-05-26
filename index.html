@@ -163,13 +163,88 @@
       const humanYears = (testDate - humanDate) / (1000 * 60 * 60 * 24 * 365.25);
       const years = Math.floor(humanYears);
       const days = Math.floor((humanYears - years) * 365.25);
-      const ageDetails = `You and your puppy will be ${years} years and ${days} days old.`;
+      let subMessage = '';
+      const quirkyMessages = {
+        veryYoung: [
+          'Aww looks like you will be growing up with this pup',
+          'Blink and you’re the same age!',
+          'The dog will be doing taxes by the time you’re in 2nd grade',
+          'Give it a year and they’ll be applying to preschools together'
+        ],
+        teenager: [
+          'Just a couple of teenagers',
+          'Both of you will be complaining about your parents at this age',
+          'Teenage years, best time to have a dog',
+          'Please, no mood swings and barking matches'
+        ],
+        senior: [
+          'I’m sorry, I dont think the human will make it this long...',
+          'Not looking good for the human',
+          'Your dog will be celebrating while you are in your grave most likely.',
+          'I think you might have punched in some random dates',
+          'If you’re reading this, why are you here',
+          'Hope your robot caretakers enjoy this milestone too'
+        ],
+        middleAge: [
+          'You and your pup are probably too into politics at this age',
+          'You and your pup might start grunting everytime you get up at this age.',
+          'Yo doggy may be having a mid life crisis along with you.',
+          'One of you is buying a convertible... probably the dog'
+        ],
+        twentyOne: [
+          'Try not to get too drunk with your pup',
+          'Your puppy can legally get wasted!!',
+          '21 years old... nothing important going on during this year.',
+          'Your pup may develop a low form of alcoholism where they drink a little everyday',
+          'Make sure your pup has a ride home!'
+        ],
+        oldAF: [
+          'Gawwwdam 200+ years old is insane work',
+          'In what universe will either of you live this long',
+          'YOU’LL LIVE TO SEE THIS WORLD CRUMBLE TO DUST AND BLOW AWAY!!!',
+          'EVERYTHING AND EVERYONE YOU KNOW WILL BE GONE',
+          'Your bones will be dust and your dog will rule the future'
+        ],
+        sixnine: [
+          'Ahh the golden years',
+          'Either you got lucky or you purposefully tried to land on this year',
+          '6ix9ine',
+          'Nice.',
+        ],
+        fihunnid: [
+          'WHAT WILL YOU HAVE AFTER 500 YEARS!!!',
+          `<span style="color: #007BFF; font-weight: bold;">${years}</span> years old... really? You think that will happen?`
+          ,
+          'Okay this site was made with serious intent and you are putting wack numbers in',
+        ],
+      };
+
+      if (years > 500) {
+        subMessage = quirkyMessages.fihunnid[Math.floor(Math.random() * quirkyMessages.fihunnid.length)];
+      } else if (years > 200) {
+        subMessage = quirkyMessages.oldAF[Math.floor(Math.random() * quirkyMessages.oldAF.length)];
+      } else if (years > 125) {
+        subMessage = quirkyMessages.senior[Math.floor(Math.random() * quirkyMessages.senior.length)];
+      } else if (years === 69) {
+        subMessage = quirkyMessages.sixnine[Math.floor(Math.random() * quirkyMessages.sixnine.length)];
+      } else if (years === 21) {
+        subMessage = quirkyMessages.twentyOne[Math.floor(Math.random() * quirkyMessages.twentyOne.length)];
+      } else if (years >= 40 && years <= 60) {
+        subMessage = quirkyMessages.middleAge[Math.floor(Math.random() * quirkyMessages.middleAge.length)];
+      } else if (years >= 13 && years <= 17) {
+        subMessage = quirkyMessages.teenager[Math.floor(Math.random() * quirkyMessages.teenager.length)];
+      } else if (years < 5) {
+        subMessage = quirkyMessages.veryYoung[Math.floor(Math.random() * quirkyMessages.veryYoung.length)];
+      }
+
+      const ageDetails = `You and your puppy will be <strong>${years} years and ${days}</strong> days old.`;
 
       const resultEl = document.getElementById('result');
       resultEl.innerHTML = `
         <div class="result-text">🎉 You and your dog will be the same age on...</div>
         <div class="result-date" style="font-weight: 800;">${dateText}</div>
         <div class="result-text" style="margin-top: 30px; font-size: 16px;">${ageDetails}</div>
+        ${subMessage ? `<div class="result-text" style="margin: 40px 0 20px 0; font-size: 14px; color: #666; text-align: center;"><em>${subMessage}</em></div>` : ''}
       `;
       resultEl.classList.remove('visible');
 
