@@ -111,10 +111,10 @@
   <div class="container active" id="inputScreen">
     <h1>🐶 Puppy Age Match Calculator</h1>
     <label for="humanBirthday">Your Birthday:</label>
-    <input type="date" id="humanBirthday" />
+    <input type="date" id="humanBirthday" inputmode="numeric" pattern="[0-9]*" />
 
     <label for="dogBirthday">Your Dog's Birthday:</label>
-    <input type="date" id="dogBirthday" />
+    <input type="date" id="dogBirthday" inputmode="numeric" pattern="[0-9]*" />
 
     <button onclick="calculateSameAgeDay()">Find Our Same Age Day</button>
     <p style="margin-top: 10px; font-size: 14px; color: #555;">(Assuming 1 dog year = 7 human years)</p>
@@ -126,14 +126,11 @@
     <div class="big-result" id="result"></div>
     <div style="margin-top: 40px; display: flex; align-items: center; gap: 10px;">
       <label for="dogName" style="font-size: 14px;">Your Dog's Name:</label>
-      <input type="text" id="dogName" style="font-size: 12px; padding: 4px; width: 150px;" />
+      <input type="text" id="dogName" style="font-size: 12px; padding: 4px; width: 150px;; transition: opacity 0.4s ease;" autocomplete="off" autocorrect="off" autocapitalize="off" />
       <button id="shareButton" style="font-size: 12px; padding: 6px 12px; display: none;">Share</button>
     </div>
   </div>
-    
-  </div>
-
-  <canvas id="confettiCanvas"></canvas>
+<canvas id="confettiCanvas"></canvas>
 
   <script>
     let confetti = [];
@@ -176,6 +173,7 @@
 
       document.getElementById('inputScreen').classList.remove('active');
       document.getElementById('resultScreen').classList.add('active');
+      document.getElementById('dogName').focus();
 
       setTimeout(() => {
         resultEl.classList.add('visible');
