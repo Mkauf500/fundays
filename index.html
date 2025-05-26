@@ -463,6 +463,8 @@ Calculated with PuppyAgeMatch 🐶`}`;
 }
 
 window.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('humanBirthday').value = '';
+  document.getElementById('dogBirthday').value = '';
   autoFormatDate(document.getElementById('humanBirthday'));
   autoFormatDate(document.getElementById('dogBirthday'));
 });
