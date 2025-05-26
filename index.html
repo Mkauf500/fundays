@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Puppy Age Match</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #fef8ef;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .container, .result-screen {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      width: 100%;
+      position: relative;
+    }
+    .active {
+      display: flex;
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    input[type="date"] {
+      padding: 8px;
+      margin: 5px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      background-color: #ffa94d;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #ff922b;
+    }
+    .big-result {
+      text-align: center;
+      padding: 20px;
+      opacity: 0;
+      transition: opacity 1.5s ease-in;
+      max-width: 90%;
+    }
+    .big-result.visible {
+      opacity: 1;
+    }
+    .result-text {
+      font-size: 22px;
+    }
+    .result-date {
+      font-size: 48px;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+    .error-message {
+      color: red;
+      font-weight: bold;
+      margin-top: 15px;
+    }
+    .top-left-button {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      padding: 8px 16px;
+      font-size: 14px;
+      background-color: #ccc;
+      color: #000;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+    }
+    .top-left-button:hover {
+      background-color: #bbb;
+    }
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 999;
+    }
+  </style>
+</head>
+<body>
+  <div class="container active" id="inputScreen">
+    <h1>🐶 Puppy Age Match Calculator</h1>
+    <label for="humanBirthday">Your Birthday:</label>
+    <input type="date" id="humanBirthday" />
+
+    <label for="dogBirthday">Your Dog's Birthday:</label>
+    <input type="date" id="dogBirthday" />
+
+    <button onclick="calculateSameAgeDay()">Find Our Same Age Day</button>
+    <p style="margin-top: 10px; font-size: 14px; color: #555;">(Assuming 1 dog year = 7 human years)</p>
+    <div id="error" class="error-message"></div>
+  </div>
+
+  <div class="result-screen" id="resultScreen">
+    <button class="top-left-button" onclick="goBack()">← Try Another</button>
+    <div class="big-result" id="result"></div>
+  </div>
+
+  <canvas id="confettiCanvas"></canvas>
+
+  <script>
+    let confetti = [];
+    const canvas = document.getElementById('confettiCanvas');
+    const ctx = canvas.getContext('2d');
+
+    function calculateSameAgeDay() {
+      const humanInput = document.getElementById('humanBirthday');
+      const dogInput = document.getElementById('dogBirthday');
+      const errorEl = document.getElementById('error');
+      const humanDate = new Date(humanInput.value);
+      const dogDate = new Date(dogInput.value);
+
+      errorEl.textContent = '';
+
+      if (isNaN(humanDate) || isNaN(dogDate)) {
+        errorEl.textContent = 'Please enter both dates!';
+        return;
+      }
+
+      
+
+      // Calculate T = X + (7/6)(Y - X)
+      const xTime = humanDate.getTime();
+      const yTime = dogDate.getTime();
+      const tTime = xTime + (7 / 6) * (yTime - xTime);
+      const testDate = new Date(tTime);
+
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      const dateText = testDate.toLocaleDateString(undefined, options);
+
+      // Calculate age in years
+      const ageInDays = (testDate - humanDate) / (1000 * 60 * 60 * 24);
+      const humanYears = (testDate - humanDate) / (1000 * 60 * 60 * 24 * 365.25);
+      const dogYears = (testDate - dogDate) / (1000 * 60 * 60 * 24 * 365.25);
+      const years = Math.floor(humanYears);
+      const days = Math.floor((humanYears - years) * 365.25);
+      const ageDetails = `You and your puppy will be ${years} years and ${days} days old.`;
+      const resultEl = document.getElementById('result');
+      resultEl.innerHTML = `
+        <div class="result-text">🎉 You and your dog will be the same age on...</div>
+        <div class="result-date" style="font-weight: 800;">${dateText}</div>
+        <div class="result-text" style="margin-top: 30px; font-size: 16px;">${ageDetails}</div>
+      `;
+      resultEl.classList.remove('visible');
+
+      document.getElementById('inputScreen').classList.remove('active');
+      document.getElementById('resultScreen').classList.add('active');
+
+      setTimeout(() => {
+        resultEl.classList.add('visible');
+      }, 300);
+
+      launchConfetti();
+    }
+
+    function goBack() {
+      document.getElementById('resultScreen').classList.remove('active');
+      document.getElementById('inputScreen').classList.add('active');
+      document.getElementById('result').classList.remove('visible');
+      document.getElementById('error').textContent = '';
+      clearCanvas();
+    }
+
+    function launchConfetti() {
+      resizeCanvas();
+      confetti = Array.from({ length: 150 }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height - canvas.height,
+        r: Math.random() * 6 + 4,
+        d: Math.random() * 10 + 5,
+        color: `hsl(${Math.random() * 360}, 100%, 70%)`,
+        tilt: Math.random() * 10 - 10,
+        tiltAngle: 0,
+      }));
+      animateConfetti();
+    }
+
+    function animateConfetti() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      confetti.forEach(c => {
+        c.y += c.d * 0.5;
+        c.tiltAngle += 0.05;
+        ctx.beginPath();
+        ctx.lineWidth = c.r / 2;
+        ctx.strokeStyle = c.color;
+        ctx.moveTo(c.x + c.tilt, c.y);
+        ctx.lineTo(c.x + c.tilt + c.r, c.y + c.r);
+        ctx.stroke();
+      });
+      requestAnimationFrame(animateConfetti);
+    }
+
+    function clearCanvas() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      confetti = [];
+    }
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+  </script>
+</body>
+</html>
