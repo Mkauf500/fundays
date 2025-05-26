@@ -146,8 +146,12 @@
       const humanInput = document.getElementById('humanBirthday');
       const dogInput = document.getElementById('dogBirthday');
       const errorEl = document.getElementById('error');
-      const humanDate = new Date(humanInput.value);
-      const dogDate = new Date(dogInput.value);
+      function parseDate(input) {
+        const [month, day, year] = input.split('/');
+        return new Date(`${year}-${month}-${day}`);
+      }
+      const humanDate = parseDate(humanInput.value);
+      const dogDate = parseDate(dogInput.value);
 
       errorEl.textContent = '';
 
@@ -262,7 +266,7 @@
         ],
         HanSti: [
           'Hannah and Stiorra I presume?',
-          'Stiorra is going to be older than you in no time AHAHAHA",
+          'Stiorra is going to be older than you in no time AHAHAHA',
         ],
         JorSti: [
           '25 Years old eh? That is a quarter of 100. Big milestone for Jordan and Stiorra',
@@ -290,7 +294,7 @@
         subMessage = 'Nik how did you even know Stiorra’s birthday you wizard'
       } else if (years === 27 && days === 239 && dateText === `February 26th, 2027`) {
         subMessage = quirkyMessages.IkenWin[Math.floor(Math.random() * quirkyMessages.IkenWin.length)]
-      } esle if (years === 20 && days === 47 && dateText === `November 16th, 2025`) {
+      } else if (years === 20 && days === 47 && dateText === `November 16th, 2025`) {
         subMessage = quirkyMessages.HanSti[Math.floor(Math.random() * quirkyMessages.HanSti.length)]
       } else if (years > 200) {
         subMessage = quirkyMessages.oldAF[Math.floor(Math.random() * quirkyMessages.oldAF.length)];
@@ -307,6 +311,7 @@
       } else if (years < 5) {
         subMessage = quirkyMessages.veryYoung[Math.floor(Math.random() * quirkyMessages.veryYoung.length)];
       }
+
      const ageDetails = `${testDate < new Date()
   ? `You and your puppy were <strong>${years} years and ${days} days old.</strong>`
   : `You and your puppy will be <strong>${years} years and ${days} days old.</strong>`}`;
@@ -443,16 +448,17 @@ Calculated with PuppyAgeMatch 🐶`}`;
     }
 
     window.addEventListener('resize', resizeCanvas);
-    function autoFormatDate(input) {
+   function autoFormatDate(input) {
   input.addEventListener('input', () => {
-    let value = input.value.replace(/[^\d]/g, '');
-    if (value.length >= 5) {
-      input.value = `${value.slice(0, 2)}/${value.slice(2, 4)}/${value.slice(4, 8)}`;
-    } else if (value.length >= 3) {
-      input.value = `${value.slice(0, 2)}/${value.slice(2, 4)}`;
-    } else if (value.length >= 1) {
-      input.value = `${value.slice(0, 2)}`;
+    let raw = input.value.replace(/[^\d]/g, '').slice(0, 8);
+    let masked = 'MM/DD/YYYY'.split('');
+
+    for (let i = 0, j = 0; i < raw.length && j < masked.length; i++, j++) {
+      if (j === 2 || j === 5) j++; // Skip slashes
+      masked[j] = raw[i];
     }
+
+    input.value = masked.join('');
   });
 }
 
