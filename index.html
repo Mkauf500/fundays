@@ -164,6 +164,14 @@
       const years = Math.floor(humanYears);
       const days = Math.floor((humanYears - years) * 365.25);
       let subMessage = '';
+      const isPast = testDate < new Date();
+      const pastQuips = [
+        'You missed it — hope your dog threw a party without you.',
+        'Oof I am sorry you missed it.',
+        'You and your dog were the same age... and you didn’t even notice.',
+        'What kind of dog owner misses when their pup passes them in age...',
+        'It happened, and you missed it.'
+      ];
       const quirkyMessages = {
         veryYoung: [
           'Aww looks like you will be growing up with this pup',
@@ -213,13 +221,14 @@
         ],
         fihunnid: [
           'WHAT WILL YOU HAVE AFTER 500 YEARS!!!',
-          `<span style="color: #007BFF; font-weight: bold;">${years}</span> years old... really? You think that will happen?`
-          ,
+          `<span style="color: #007BFF; font-weight: bold;">${years}</span> years old... really? You think that will happen?`,
           'Okay this site was made with serious intent and you are putting wack numbers in',
         ],
       };
 
-      if (years > 500) {
+      if (isPast) {
+        subMessage = pastQuips[Math.floor(Math.random() * pastQuips.length)];
+      } else if (years > 500) {
         subMessage = quirkyMessages.fihunnid[Math.floor(Math.random() * quirkyMessages.fihunnid.length)];
       } else if (years > 200) {
         subMessage = quirkyMessages.oldAF[Math.floor(Math.random() * quirkyMessages.oldAF.length)];
@@ -237,12 +246,15 @@
         subMessage = quirkyMessages.veryYoung[Math.floor(Math.random() * quirkyMessages.veryYoung.length)];
       }
 
-      const ageDetails = `You and your puppy will be <strong>${years} years and ${days}</strong> days old.`;
+     const ageDetails = `${testDate < new Date()
+  ? `You and your puppy were <strong>${years} years and ${days} days old.</strong>`
+  : `You and your puppy will be <strong>${years} years and ${days} days old.</strong>`}`;
+
 
       const resultEl = document.getElementById('result');
       resultEl.innerHTML = `
-        <div class="result-text">You and your dog will be the same age on...</div>
-        <div class="result-date" style="font-weight: 800;">🎉${dateText}🎉</div>
+        <div class="result-text">${testDate < new Date() ? 'You and your dog were the same age back on...' : 'You and your dog will be the same age on...'}</div>
+        <div class="result-date" style="font-weight: 800;">${years > 125 ? `💀${dateText}💀` : `🎉${dateText}🎉`}</div>
         <div class="result-text" style="margin-top: 30px; font-size: 16px;">${ageDetails}</div>
         ${subMessage ? `<div class="result-text" style="margin: 40px 0 20px 0; font-size: 14px; color: #666; text-align: center;"><em>${subMessage}</em></div>` : ''}
       `;
@@ -267,9 +279,13 @@
             alert('Please enter your dog\'s name before sharing!');
             return;
           }
-          const shareText = `${dogName} and I will both be ${years} years and ${days} days old on ${dateText}!
+          const shareText = `${testDate < new Date() 
+            ? `${dogName} and I were ${years} years and ${days} days old on ${dateText}!
+            
+Calculated with PuppyAgeMatch 🐶`
+            : `${dogName} and I will both be ${years} years and ${days} days old on ${dateText}!
 
-Calculated with PuppyAgeMatch 🐶`;
+Calculated with PuppyAgeMatch 🐶`}`;
           navigator.share({
             title: 'Puppy Age Match 🎉',
             text: shareText,
@@ -280,7 +296,12 @@ Calculated with PuppyAgeMatch 🐶`;
         shareButton.style.display = 'none';
       }
 
-      launchConfetti();
+      if (years > 125) {
+        // launch "dust" instead of confetti
+        launchDust();
+      } else {
+        launchConfetti();
+      }
     }
 
     function goBack() {
@@ -319,6 +340,35 @@ Calculated with PuppyAgeMatch 🐶`;
         ctx.stroke();
       });
       requestAnimationFrame(animateConfetti);
+    }
+
+    function launchDust() {
+      resizeCanvas();
+      confetti = Array.from({ length: 200 }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height - canvas.height,
+        r: Math.random() * 3 + 1,
+        d: Math.random() * 5 + 2,
+        color: `rgba(130, 130, 130, ${Math.random().toFixed(2)})`,
+        tilt: Math.random() * 10 - 10,
+        tiltAngle: 0,
+      }));
+      animateDust();
+    }
+
+    function animateDust() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      confetti.forEach(c => {
+        c.y += c.d * 0.3;
+        c.tiltAngle += 0.01;
+        ctx.beginPath();
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = c.color;
+        ctx.moveTo(c.x + c.tilt, c.y);
+        ctx.lineTo(c.x + c.tilt + c.r, c.y + c.r);
+        ctx.stroke();
+      });
+      requestAnimationFrame(animateDust);
     }
 
     function clearCanvas() {
