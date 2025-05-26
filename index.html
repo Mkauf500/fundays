@@ -32,6 +32,10 @@
     }
     h1 {
       margin-bottom: 20px;
+      text-align: center;
+      width: 100%;
+      display: flex;
+      justify-content: center;
     }
     label {
       display: block;
@@ -188,7 +192,7 @@
             alert('Please enter your dog\'s name before sharing!');
             return;
           }
-          const shareText = `${dogName} and I will be ${years} years and ${days} old on ${dateText}!
+          const shareText = `${dogName} and I will both be ${years} years and ${days} days old on ${dateText}!
 
 Calculated with PuppyAgeMatch 🐶`;
           navigator.share({
