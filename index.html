@@ -164,6 +164,10 @@
       const xTime = humanDate.getTime();
       const yTime = dogDate.getTime();
       const tTime = xTime + (7 / 6) * (yTime - xTime);
+      if (tTime < 0) {
+        errorEl.textContent = 'These dates don’t work — your dogs always been older than you!';
+        return;
+      }
       const testDate = new Date(tTime);
 
       const options = { year: 'numeric', month: 'long', day: 'numeric' };
