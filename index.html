@@ -111,10 +111,10 @@
   <div class="container active" id="inputScreen">
     <h1>🐶 Puppy Age Match Calculator</h1>
     <label for="humanBirthday">Your Birthday:</label>
-    <input type="date" id="humanBirthday" inputmode="numeric" pattern="[0-9]*" />
+    <input type="text" id="humanBirthday" placeholder="YYYY-MM-DD" pattern="\d{4}-\d{2}-\d{2}" />
 
     <label for="dogBirthday">Your Dog's Birthday:</label>
-    <input type="date" id="dogBirthday" inputmode="numeric" pattern="[0-9]*" />
+    <input type="text" id="dogBirthday" placeholder="YYYY-MM-DD" pattern="\d{4}-\d{2}-\d{2}" />
 
     <button onclick="calculateSameAgeDay()">Find Our Same Age Day</button>
     <p style="margin-top: 10px; font-size: 14px; color: #555;">(Assuming 1 dog year = 7 human years)</p>
@@ -173,7 +173,7 @@
 
       document.getElementById('inputScreen').classList.remove('active');
       document.getElementById('resultScreen').classList.add('active');
-      document.getElementById('dogName').focus();
+      
 
       setTimeout(() => {
         resultEl.classList.add('visible');
