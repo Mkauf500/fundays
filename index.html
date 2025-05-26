@@ -37,7 +37,7 @@
       display: block;
       margin-top: 10px;
     }
-    input[type="date"] {
+    input[type="date"], input[type="text"] {
       padding: 8px;
       margin: 5px 0;
       border-radius: 5px;
@@ -120,6 +120,13 @@
   <div class="result-screen" id="resultScreen">
     <button class="top-left-button" onclick="goBack()">← Try Another</button>
     <div class="big-result" id="result"></div>
+    <div style="margin-top: 40px; display: flex; align-items: center; gap: 10px;">
+      <label for="dogName" style="font-size: 14px;">Your Dog's Name:</label>
+      <input type="text" id="dogName" style="font-size: 12px; padding: 4px; width: 150px;" />
+      <button id="shareButton" style="font-size: 12px; padding: 6px 12px; display: none;">Share</button>
+    </div>
+  </div>
+    
   </div>
 
   <canvas id="confettiCanvas"></canvas>
@@ -139,13 +146,9 @@
       errorEl.textContent = '';
 
       if (isNaN(humanDate) || isNaN(dogDate)) {
-        errorEl.textContent = 'Please enter both dates!';
+        errorEl.textContent = 'Please enter both birthdays!';
         return;
-      }
-
-      
-
-      // Calculate T = X + (7/6)(Y - X)
+      } // keep function open
       const xTime = humanDate.getTime();
       const yTime = dogDate.getTime();
       const tTime = xTime + (7 / 6) * (yTime - xTime);
@@ -154,13 +157,11 @@
       const options = { year: 'numeric', month: 'long', day: 'numeric' };
       const dateText = testDate.toLocaleDateString(undefined, options);
 
-      // Calculate age in years
-      const ageInDays = (testDate - humanDate) / (1000 * 60 * 60 * 24);
       const humanYears = (testDate - humanDate) / (1000 * 60 * 60 * 24 * 365.25);
-      const dogYears = (testDate - dogDate) / (1000 * 60 * 60 * 24 * 365.25);
       const years = Math.floor(humanYears);
       const days = Math.floor((humanYears - years) * 365.25);
       const ageDetails = `You and your puppy will be ${years} years and ${days} days old.`;
+
       const resultEl = document.getElementById('result');
       resultEl.innerHTML = `
         <div class="result-text">🎉 You and your dog will be the same age on...</div>
@@ -176,6 +177,30 @@
         resultEl.classList.add('visible');
       }, 300);
 
+      
+
+      const shareButton = document.getElementById('shareButton');
+      if (navigator.share) {
+        shareButton.style.display = 'block';
+        shareButton.onclick = () => {
+                    const dogName = document.getElementById('dogName').value.trim();
+          if (!dogName) {
+            alert('Please enter your dog\'s name before sharing!');
+            return;
+          }
+          const shareText = `${dogName} will be ${years} years old on ${dateText}!
+
+Calculated with PuppyAgeMatch 🐶`;
+          navigator.share({
+            title: 'Puppy Age Match 🎉',
+            text: shareText,
+            url: window.location.href
+          });
+        };
+      } else {
+        shareButton.style.display = 'none';
+      }
+
       launchConfetti();
     }
 
@@ -184,6 +209,7 @@
       document.getElementById('inputScreen').classList.add('active');
       document.getElementById('result').classList.remove('visible');
       document.getElementById('error').textContent = '';
+      document.getElementById('shareButton').style.display = 'none';
       clearCanvas();
     }
 
