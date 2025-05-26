@@ -170,8 +170,20 @@
       }
       const testDate = new Date(tTime);
 
-      const options = { year: 'numeric', month: 'long', day: 'numeric' };
-      const dateText = testDate.toLocaleDateString(undefined, options);
+      function getOrdinalSuffix(day) {
+        if (day > 3 && day < 21) return 'th';
+        switch (day % 10) {
+          case 1: return 'st';
+          case 2: return 'nd';
+          case 3: return 'rd';
+          default: return 'th';
+        }
+      }
+      const day = testDate.getDate();
+      const suffix = getOrdinalSuffix(day);
+      const month = testDate.toLocaleString(undefined, { month: 'long' });
+      const year = testDate.getFullYear();
+      const dateText = `${month} ${day}${suffix}, ${year}`;
 
       const humanYears = (testDate - humanDate) / (1000 * 60 * 60 * 24 * 365.25);
       const years = Math.floor(humanYears);
@@ -237,13 +249,30 @@
           `<span style="color: #007BFF; font-weight: bold;">${years}</span> years old... really? You think that will happen?`,
           'Okay this site was made with serious intent and you are putting wack numbers in',
         ],
+        MatthewandStiorra: [
+          'Absolute coolest day to celebrate... Right Stiorra?',
+        ],
+        IkenWin: [
+          'Isaac and Winnie.. what a couple of goofballs',
+          'I put all this effort in to make this website you better celebrate this day',
+        ],
+        HannWin: [
+        'Hello Hannah, thanks for using PuppyAgeMatch.com',
+        'They grow up so fast don’t they Hannah',
+        ],
       };
 
       if (isPast) {
         subMessage = pastQuips[Math.floor(Math.random() * pastQuips.length)];
       } else if (years > 500) {
         subMessage = quirkyMessages.fihunnid[Math.floor(Math.random() * quirkyMessages.fihunnid.length)];
-      } else if (years > 200) {
+      }  else if (years === 23 && days === 222 && dateText === `May 16th, 2026`) {
+        subMessage = quirkyMessages.MatthewandStiorra[Math.floor(Math.random() * quirkyMessages.MatthewandStiorra.length)];
+      } else if (years === 26 && days === 129 && dateText === `December 21st, 2026`) {
+        subMessage = quirkyMessages.HannWin[Math.floor(Math.random () *quirkyMessages.HannWin.length)]
+      } else if (years === 27 && days === 239 && dateText === `February 26th, 2027`) {
+        submessage = quirkyMessages.IkenWin[Math.floor(Math.random() * quirkyMessages.IkenWin.length)]
+      }else if (years > 200) {
         subMessage = quirkyMessages.oldAF[Math.floor(Math.random() * quirkyMessages.oldAF.length)];
       } else if (years > 125) {
         subMessage = quirkyMessages.senior[Math.floor(Math.random() * quirkyMessages.senior.length)];
@@ -414,6 +443,6 @@ window.addEventListener('DOMContentLoaded', () => {
 });
   </script>
 <p style="font-size: 14px; color: #666; margin-top: 40px; text-align: center;">
-  Created by Matthew 🐶<br>
+  Created by a man with a dog 🐶<br>
 </p>
 </html>
