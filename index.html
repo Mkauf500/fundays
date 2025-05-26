@@ -239,7 +239,7 @@
           'Your bones will be dust and your dog will rule the future'
         ],
         sixnine: [
-          'Ahh the golden years',
+          'Ahh the golden year',
           'Either you got lucky or you purposefully tried to land on this year',
           '6ix9ine',
           'Nice.',
@@ -254,11 +254,19 @@
         ],
         IkenWin: [
           'Isaac and Winnie.. what a couple of goofballs',
-          'I put all this effort in to make this website you better celebrate this day',
+          'Isaac, you better celebrate this day',
         ],
         HannWin: [
         'Hello Hannah, thanks for using PuppyAgeMatch.com',
         'They grow up so fast don’t they Hannah',
+        ],
+        HanSti: [
+          'Hannah and Stiorra I presume?',
+          'Stiorra is going to be older than you in no time AHAHAHA",
+        ],
+        JorSti: [
+          '25 Years old eh? That is a quarter of 100. Big milestone for Jordan and Stiorra',
+          'I wonder how many more UCS Lego sets you will have by September 3rd, 2026',
         ],
       };
 
@@ -266,13 +274,25 @@
         subMessage = pastQuips[Math.floor(Math.random() * pastQuips.length)];
       } else if (years > 500) {
         subMessage = quirkyMessages.fihunnid[Math.floor(Math.random() * quirkyMessages.fihunnid.length)];
-      }  else if (years === 23 && days === 222 && dateText === `May 16th, 2026`) {
+      } else if (years === 61 && days 134 && dateText === `October 8th, 2031`) {
+        subMessage = 'Jeff and Stiorra are the same age a day after her owners 29th birthday how awesome!'
+      } else if (years === 25 && days === 259 && dateText === `September 3rd, 2026`) {
+        subMessage = quirkyMessages.JorSti[Math.floor(Math.random () *quirkyMessages.JorSti.length)]
+      } else if (years === 23 && days === 222 && dateText === `May 16th, 2026`) {
         subMessage = quirkyMessages.MatthewandStiorra[Math.floor(Math.random() * quirkyMessages.MatthewandStiorra.length)];
       } else if (years === 26 && days === 129 && dateText === `December 21st, 2026`) {
         subMessage = quirkyMessages.HannWin[Math.floor(Math.random () *quirkyMessages.HannWin.length)]
+      } else if (years === 57 && days === 47 && dateText === `March 1st, 2031`) {
+        subMessage = `Sti Sti will be as young as Mima!!`
+      } else if (years === 29 && days === 38 && dateText === `February 27th 2027`) {
+        subMessage = 'Woah Alex! You are the same age as Stiorra a day after Isaac is the samae age as Winnie!'
+      } else if (years === 26 && days === 36 && dateText === 'September 23rd, 2026') {
+        subMessage = 'Nik how did you even know Stiorra’s birthday you wizard'
       } else if (years === 27 && days === 239 && dateText === `February 26th, 2027`) {
         subMessage = quirkyMessages.IkenWin[Math.floor(Math.random() * quirkyMessages.IkenWin.length)]
-      }else if (years > 200) {
+      } esle if (years === 20 && days === 47 && dateText === `November 16th, 2025`) {
+        subMessage = quirkyMessages.HanSti[Math.floor(Math.random() * quirkyMessages.HanSti.length)]
+      } else if (years > 200) {
         subMessage = quirkyMessages.oldAF[Math.floor(Math.random() * quirkyMessages.oldAF.length)];
       } else if (years > 125) {
         subMessage = quirkyMessages.senior[Math.floor(Math.random() * quirkyMessages.senior.length)];
@@ -287,7 +307,6 @@
       } else if (years < 5) {
         subMessage = quirkyMessages.veryYoung[Math.floor(Math.random() * quirkyMessages.veryYoung.length)];
       }
-
      const ageDetails = `${testDate < new Date()
   ? `You and your puppy were <strong>${years} years and ${days} days old.</strong>`
   : `You and your puppy will be <strong>${years} years and ${days} days old.</strong>`}`;
