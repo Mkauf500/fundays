@@ -448,19 +448,19 @@ Calculated with PuppyAgeMatch 🐶`}`;
     }
 
     window.addEventListener('resize', resizeCanvas);
-   function autoFormatDate(input) {
+  function autoFormatDate(input) {
   input.addEventListener('input', () => {
-    let raw = input.value.replace(/[^\d]/g, '').slice(0, 8);
-    let masked = 'MM/DD/YYYY'.split('');
+    let cleaned = input.value.replace(/[^\d]/g, '').slice(0, 8);
+    let formatted = '';
 
-    for (let i = 0, j = 0; i < raw.length && j < masked.length; i++, j++) {
-      if (j === 2 || j === 5) j++; // Skip slashes
-      masked[j] = raw[i];
-    }
+    if (cleaned.length > 0) formatted += cleaned.substring(0, 2);
+    if (cleaned.length > 2) formatted += '/' + cleaned.substring(2, 4);
+    if (cleaned.length > 4) formatted += '/' + cleaned.substring(4, 8);
 
-    input.value = masked.join('');
+    input.value = formatted;
   });
 }
+
 
 window.addEventListener('DOMContentLoaded', () => {
   document.getElementById('humanBirthday').value = '';
