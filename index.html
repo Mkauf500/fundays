@@ -121,7 +121,7 @@
     <label for="dogBirthday">Your Dog's Birthday:</label>
     <input type="text" id="dogBirthday" placeholder="MM/DD/YYYY" inputmode="numeric" pattern="\d{2}/\d{2}/\d{4}" />
 
-    <button onclick="calculateSameAgeDay()">Find Our Same Age Day</button>
+    <button onclick ="calculateSameAgeDay()">Find Our Same Age Day</button>
     <p style="margin-top: 10px; font-size: 14px; color: #555;">(Assuming 1 dog year = 7 human years)</p>
     <div id="error" class="error-message"></div>
   </div>
@@ -129,11 +129,21 @@
   <div class="result-screen" id="resultScreen">
     <button class="top-left-button" onclick="goBack()">← Try Another</button>
     <div class="big-result" id="result"></div>
-    <div style="margin-top: 40px; display: flex; align-items: center; gap: 10px;">
+    <div style="margin-top: 40px; display: flex; flex-direction: column; align-items: flex-start; gap: 6px;">
       <label for="dogName" style="font-size: 14px;">Your Dog's Name:</label>
-      <input type="text" id="dogName" style="font-size: 12px; padding: 4px; width: 150px;; transition: opacity 0.4s ease;" autocomplete="off" autocorrect="off" autocapitalize="off" />
+      <input type="text" id="dogName" style="font-size: 12px; padding: 4px; width: 150px;; transition: opacity 0.4s ease;" autocomplete="off" autocorrect="off" autocapitalize="on" />
       <button id="shareButton" style="font-size: 12px; padding: 6px 12px; display: none;">Share</button>
-    </div>
+ </div>
+      <div id="shareError"
+     style="
+       display: block;
+       flex-basis: 100%;
+       width: 250px;
+       margin-top: 4px;
+       font-size: 12px;
+       color: red;
+     ">
+  </div>
   </div>
 <canvas id="confettiCanvas"></canvas>
 
@@ -152,9 +162,9 @@
       }
       const humanDate = parseDate(humanInput.value);
       const dogDate = parseDate(dogInput.value);
-
+      const cutoff = parseDate('07/04/1776');
       errorEl.textContent = '';
-
+      
       if (isNaN(humanDate) || isNaN(dogDate)) {
         errorEl.textContent = 'Please enter valid dates in MM/DD/YYYY format!';
         return;
@@ -164,15 +174,16 @@
       if (!isValidDate(humanDate) || !isValidDate(dogDate)) {
         errorEl.textContent = 'C’mon enter valid dates in MM/DD/YYYY format.';
         return;
-      } // keep function open
+      }
       const xTime = humanDate.getTime();
       const yTime = dogDate.getTime();
       const tTime = xTime + (7 / 6) * (yTime - xTime);
-      if (tTime < 0) {
-        errorEl.textContent = 'These dates don’t work — your dogs always been older than you!';
+      const testDate = new Date(tTime);
+      if (testDate < humanDate) {
+        errorEl.textContent = 'These dates don’t work — your puppy was older than you at birth!';
         return;
       }
-      const testDate = new Date(tTime);
+    
 
       function getOrdinalSuffix(day) {
         if (day > 3 && day < 21) return 'th';
@@ -188,7 +199,7 @@
       const month = testDate.toLocaleString(undefined, { month: 'long' });
       const year = testDate.getFullYear();
       const dateText = `${month} ${day}${suffix}, ${year}`;
-
+      const isOld = humanDate < cutoff;
       const humanYears = (testDate - humanDate) / (1000 * 60 * 60 * 24 * 365.25);
       const years = Math.floor(humanYears);
       const days = Math.floor((humanYears - years) * 365.25);
@@ -272,23 +283,40 @@
           '25 Years old eh? That is a quarter of 100. Big milestone for Jordan and Stiorra',
           'I wonder how many more UCS Lego sets you will have by September 3rd, 2026',
         ],
+        CatchAll: [
+          'Enjoy this milestone!',
+          'Celebrate this lovely day!',
+          'A day to remember!',
+          'Your pup will know when this day comes, hope you’re ready.',
+          'WOOP WOOP!',
+          '*Bark*',
+          'Thanks for using the site!',
+          'What a fun day to look forward to!',
+          'I can tell you love your dog.',
+          'You matter.',
+          'PuppyAgeMatch.com LLC DBA PP PooPoo',
+          'I spent too much of my freetime on this site',
+          'Thanks for using the site!',
+        ],
       };
 
-      if (isPast) {
+      if (isOld) {
+        subMessage = 'Liar you were not born back then! Take this serious!'
+      } else if (isPast) {
         subMessage = pastQuips[Math.floor(Math.random() * pastQuips.length)];
       } else if (years > 500) {
         subMessage = quirkyMessages.fihunnid[Math.floor(Math.random() * quirkyMessages.fihunnid.length)];
-      } else if (years === 61 && days 134 && dateText === `October 8th, 2031`) {
+      } else if (years === 61 && days === 134 && dateText === `October 8th, 2031`) {
         subMessage = 'Jeff and Stiorra are the same age a day after her owners 29th birthday how awesome!'
       } else if (years === 25 && days === 259 && dateText === `September 3rd, 2026`) {
-        subMessage = quirkyMessages.JorSti[Math.floor(Math.random () *quirkyMessages.JorSti.length)]
+        subMessage = quirkyMessages.JorSti[Math.floor(Math.random() *quirkyMessages.JorSti.length)]
       } else if (years === 23 && days === 222 && dateText === `May 16th, 2026`) {
         subMessage = quirkyMessages.MatthewandStiorra[Math.floor(Math.random() * quirkyMessages.MatthewandStiorra.length)];
-      } else if (years === 26 && days === 129 && dateText === `December 21st, 2026`) {
-        subMessage = quirkyMessages.HannWin[Math.floor(Math.random () *quirkyMessages.HannWin.length)]
-      } else if (years === 57 && days === 47 && dateText === `March 1st, 2031`) {
-        subMessage = `Sti Sti will be as young as Mima!!`
-      } else if (years === 29 && days === 38 && dateText === `February 27th 2027`) {
+      } else if (years === 26 && days === 129 && dateText === `December 20th, 2026`) {
+        subMessage = quirkyMessages.HannWin[Math.floor(Math.random() *quirkyMessages.HannWin.length)]
+      } else if (humanInput.value === '01/12/1974' && dogInput.value === '01/01/2023') {
+        subMessage = 'Sti Sti will be as young as Mima!!';
+      } else if (years === 29 && days === 38 && dateText === `February 27th, 2027`) {
         subMessage = 'Woah Alex! You are the same age as Stiorra a day after Isaac is the samae age as Winnie!'
       } else if (years === 26 && days === 36 && dateText === 'September 23rd, 2026') {
         subMessage = 'Nik how did you even know Stiorra’s birthday you wizard'
@@ -310,17 +338,26 @@
         subMessage = quirkyMessages.teenager[Math.floor(Math.random() * quirkyMessages.teenager.length)];
       } else if (years < 5) {
         subMessage = quirkyMessages.veryYoung[Math.floor(Math.random() * quirkyMessages.veryYoung.length)];
+      } else {
+        subMessage = quirkyMessages.CatchAll[Math.floor(Math.random() * quirkyMessages.CatchAll.length)];
       }
 
      const ageDetails = `${testDate < new Date()
   ? `You and your puppy were <strong>${years} years and ${days} days old.</strong>`
   : `You and your puppy will be <strong>${years} years and ${days} days old.</strong>`}`;
 
-
+    let dateEmoji = '🎉';
+      if (years > 125) {
+        dateEmoji = '💀';
+      } else if (isOld) {
+        dateEmoji = '😱';
+      }
+      
+      
       const resultEl = document.getElementById('result');
       resultEl.innerHTML = `
         <div class="result-text">${testDate < new Date() ? 'You and your dog were the same age back on...' : 'You and your dog will be the same age on...'}</div>
-        <div class="result-date" style="font-weight: 800;">${years > 125 ? `💀${dateText}💀` : `🎉${dateText}🎉`}</div>
+        <div class="result-date" style="font-weight: 800;">${dateEmoji}${dateText}${dateEmoji} </div>
         <div class="result-text" style="margin-top: 30px; font-size: 16px;">${ageDetails}</div>
         ${subMessage ? `<div class="result-text" style="margin: 40px 0 20px 0; font-size: 14px; color: #666; text-align: center;"><em>${subMessage}</em></div>` : ''}
       `;
@@ -336,31 +373,41 @@
 
       
 
-      const shareButton = document.getElementById('shareButton');
-      if (navigator.share) {
-        shareButton.style.display = 'block';
-        shareButton.onclick = () => {
-                    const dogName = document.getElementById('dogName').value.trim();
-          if (!dogName) {
-            alert('Please enter your dog\'s name before sharing!');
-            return;
-          }
-          const shareText = `${testDate < new Date() 
-            ? `${dogName} and I were ${years} years and ${days} days old on ${dateText}!
-            
-Calculated with PuppyAgeMatch 🐶`
-            : `${dogName} and I will both be ${years} years and ${days} days old on ${dateText}!
+  const shareError   = document.getElementById('shareError');
+const shareButton  = document.getElementById('shareButton');
 
-Calculated with PuppyAgeMatch 🐶`}`;
-          navigator.share({
-            title: 'Puppy Age Match 🎉',
-            text: shareText,
-            url: window.location.href
-          });
-        };
-      } else {
-        shareButton.style.display = 'none';
-      }
+shareError.style.display  = 'none';
+shareButton.style.display = 'block';
+shareButton.textContent   = navigator.share ? 'Share' : 'Copy Share Text';
+
+shareButton.onclick = () => {
+  shareError.textContent  = '';
+  shareError.style.display = 'none';
+
+  const dogName = document.getElementById('dogName').value.trim();
+  if (!dogName) {
+    shareError.textContent  = 'Please enter your dog’s name before sharing!';
+    shareError.style.display = 'block';
+    return;
+  }
+
+  const prefix = testDate < new Date()
+    ? `${dogName} and I were ${years} years and ${days} days old on ${dateText}!`
+    : `${dogName} and I will be ${years} years and ${days} days old on ${dateText}!`;
+  const shareText = `${prefix}\n\nCalculated with PuppyAgeMatch 🐶`;
+
+  if (navigator.share) {
+    navigator.share({
+      title: 'Puppy Age Match 🎉',
+      text: shareText,
+      url: window.location.href
+    });
+  } else {
+    navigator.clipboard.writeText(shareText)
+      .then(() => alert('Share text copied to clipboard!'));
+  }
+};
+
 
       if (years > 125) {
         // launch "dust" instead of confetti
@@ -446,27 +493,35 @@ Calculated with PuppyAgeMatch 🐶`}`;
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
     }
-
-    window.addEventListener('resize', resizeCanvas);
-  function autoFormatDate(input) {
+function autoFormatDate(input) {
   input.addEventListener('input', () => {
-    let cleaned = input.value.replace(/[^\d]/g, '').slice(0, 8);
-    let formatted = '';
+  
+    const raw = input.value.replace(/\D/g, '').slice(0, 8);
 
-    if (cleaned.length > 0) formatted += cleaned.substring(0, 2);
-    if (cleaned.length > 2) formatted += '/' + cleaned.substring(2, 4);
-    if (cleaned.length > 4) formatted += '/' + cleaned.substring(4, 8);
+    let formatted = '';
+    if (raw.length > 0)  formatted = raw.substring(0, 2);
+    if (raw.length >= 3) formatted += '/' + raw.substring(2, 4);
+    if (raw.length >= 5) formatted += '/' + raw.substring(4, 8);
 
     input.value = formatted;
   });
 }
+document.getElementById('humanBirthday').addEventListener('keyup', e => {
+  if (e.key === 'Enter') calculateSameAgeDay();
+});
+document.getElementById('dogBirthday').addEventListener('keyup', e => {
+  if (e.key === 'Enter') calculateSameAgeDay();
+});
 
+    window.addEventListener('resize', resizeCanvas);
 
 window.addEventListener('DOMContentLoaded', () => {
   document.getElementById('humanBirthday').value = '';
   document.getElementById('dogBirthday').value = '';
   autoFormatDate(document.getElementById('humanBirthday'));
   autoFormatDate(document.getElementById('dogBirthday'));
+  document.getElementById('humanBirthday').addEventListener('keyup', e => { if (e.key === 'Enter') calculateSameAgeDay(); });
+  document.getElementById('dogBirthday').addEventListener('keyup', e => { if (e.key === 'Enter') calculateSameAgeDay(); });
 });
   </script>
 <p style="font-size: 14px; color: #666; margin-top: 40px; text-align: center;">
