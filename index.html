@@ -122,29 +122,22 @@
     <input type="text" id="dogBirthday" placeholder="MM/DD/YYYY" inputmode="numeric" pattern="\d{2}/\d{2}/\d{4}" />
 
     <button onclick ="calculateSameAgeDay()">Find Our Same Age Day</button>
-    <p style="margin-top: 10px; font-size: 14px; color: #555;">(Assuming 1 dog year = 7 human years)</p>
+    <p style="margin-top: 15px; font-size: 14px; color: #555;">(Assuming 1 dog year = 7 human years)</p>
     <div id="error" class="error-message"></div>
   </div>
 
   <div class="result-screen" id="resultScreen">
     <button class="top-left-button" onclick="goBack()">← Try Another</button>
     <div class="big-result" id="result"></div>
-    <div style="margin-top: 40px; display: flex; flex-direction: column; align-items: flex-start; gap: 6px;">
-      <label for="dogName" style="font-size: 14px;">Your Dog's Name:</label>
-      <input type="text" id="dogName" style="font-size: 12px; padding: 4px; width: 150px;; transition: opacity 0.4s ease;" autocomplete="off" autocorrect="off" autocapitalize="on" />
-      <button id="shareButton" style="font-size: 12px; padding: 6px 12px; display: none;">Share</button>
- </div>
-      <div id="shareError"
-     style="
-       display: block;
-       flex-basis: 100%;
-       width: 250px;
-       margin-top: 4px;
-       font-size: 12px;
-       color: red;
-     ">
+    <div style="display: flex; align-items: flex-end; gap: 6px;">
+  <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+    <label for="dogName" style="font-size: 12px; margin: 0;">Your Dog's Name:</label>
+    <input type="text" id="dogName" style="font-size: 12px; padding: 4px; width: 125px;" autocomplete="off" autocorrect="off" autocapitalize="on" />
   </div>
-  </div>
+  <button id="shareButton" style="font-size: 12px; padding: 6px 12px; display: none;">Share</button>
+</div>
+<div id="shareError" style="margin-top: 4px; font-size: 12px; color: red; text-align: center;"></div>
+</div>
 <canvas id="confettiCanvas"></canvas>
 
   <script>
@@ -306,23 +299,23 @@
         subMessage = pastQuips[Math.floor(Math.random() * pastQuips.length)];
       } else if (years > 500) {
         subMessage = quirkyMessages.fihunnid[Math.floor(Math.random() * quirkyMessages.fihunnid.length)];
-      } else if (years === 61 && days === 134 && dateText === `October 8th, 2031`) {
+      } else if (humanInput.value === '05/26/1970' && dogInput.value === '01/01/2023') {
         subMessage = 'Jeff and Stiorra are the same age a day after her owners 29th birthday how awesome!'
-      } else if (years === 25 && days === 259 && dateText === `September 3rd, 2026`) {
+      } else if (humanInput.value === '12/18/2000' && dogInput.value === '01/01/2023') {
         subMessage = quirkyMessages.JorSti[Math.floor(Math.random() *quirkyMessages.JorSti.length)]
-      } else if (years === 23 && days === 222 && dateText === `May 16th, 2026`) {
+      } else if (humanInput.value === '10/07/2002' && dogInput.value === '01/01/2023') {
         subMessage = quirkyMessages.MatthewandStiorra[Math.floor(Math.random() * quirkyMessages.MatthewandStiorra.length)];
-      } else if (years === 26 && days === 129 && dateText === `December 20th, 2026`) {
+      } else if (humanInput.value === '08/13/2000' && dogInput.value === '03/17/2023') {
         subMessage = quirkyMessages.HannWin[Math.floor(Math.random() *quirkyMessages.HannWin.length)]
       } else if (humanInput.value === '01/12/1974' && dogInput.value === '01/01/2023') {
         subMessage = 'Sti Sti will be as young as Mima!!';
-      } else if (years === 29 && days === 38 && dateText === `February 27th, 2027`) {
-        subMessage = 'Woah Alex! You are the same age as Stiorra a day after Isaac is the samae age as Winnie!'
-      } else if (years === 26 && days === 36 && dateText === 'September 23rd, 2026') {
+      } else if (humanInput.value === '01/20/1998' && dogInput.value === '01/01/2023') {
+        subMessage = 'Woah Alex! You are the same age as Stiorra a day after Isaac is the same age as Winnie!'
+      } else if ((humanInput.value === '08/18/2000' && dogInput.value === '01/01/2023')) {
         subMessage = 'Nik how did you even know Stiorra’s birthday you wizard'
-      } else if (years === 27 && days === 239 && dateText === `February 26th, 2027`) {
+      } else if (humanInput.value === '07/03/1999' && dogInput.value === '03/17/2023') {
         subMessage = quirkyMessages.IkenWin[Math.floor(Math.random() * quirkyMessages.IkenWin.length)]
-      } else if (years === 20 && days === 47 && dateText === `November 16th, 2025`) {
+      } else if (humanInput.value === '09/30/2005' && dogInput.value === '01/01/2023') {
         subMessage = quirkyMessages.HanSti[Math.floor(Math.random() * quirkyMessages.HanSti.length)]
       } else if (years > 200) {
         subMessage = quirkyMessages.oldAF[Math.floor(Math.random() * quirkyMessages.oldAF.length)];
