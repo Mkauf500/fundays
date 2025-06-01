@@ -83,10 +83,15 @@
       font-weight: bold;
       margin-top: 10px;
     }
-    .error-message {
+    .error-message, #shareError {
       color: red;
       font-weight: bold;
       margin-top: 15px;
+      font-size: 12px;
+      text-align: center;
+    }
+    .error-message.visible, #shareError.visible {
+      visibility: visible;
     }
     .top-left-button {
       position: absolute;
@@ -129,14 +134,14 @@
   <div class="result-screen" id="resultScreen">
     <button class="top-left-button" onclick="goBack()">← Try Another</button>
     <div class="big-result" id="result"></div>
-    <div style="display: flex; align-items: flex-end; gap: 6px;">
+    <div style="display: flex; align-items: center; gap: 6px;">
   <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
     <label for="dogName" style="font-size: 12px; margin: 0;">Your Dog's Name:</label>
     <input type="text" id="dogName" style="font-size: 12px; padding: 4px; width: 125px;" autocomplete="off" autocorrect="off" autocapitalize="on" />
   </div>
   <button id="shareButton" style="font-size: 12px; padding: 6px 12px; display: none;">Share</button>
 </div>
-<div id="shareError" style="margin-top: 4px; font-size: 12px; color: red; text-align: center;"></div>
+<div id="shareError" style="margin-top: 5 px; font-size: 12px; color: red; text-align: center; min-height: 1em;"></div>
 </div>
 <canvas id="confettiCanvas"></canvas>
 
@@ -285,8 +290,8 @@
           '*Bark*',
           'Thanks for using the site!',
           'What a fun day to look forward to!',
-          'I can tell you love your dog.',
-          'You matter.',
+          'Your dog appreciates you learning about this important day.',
+          'Hurray!',
           'PuppyAgeMatch.com LLC DBA PP PooPoo',
           'I spent too much of my freetime on this site',
           'Thanks for using the site!',
@@ -369,7 +374,7 @@
   const shareError   = document.getElementById('shareError');
 const shareButton  = document.getElementById('shareButton');
 
-shareError.style.display  = 'none';
+shareError.classList.remove('visible');
 shareButton.style.display = 'block';
 shareButton.textContent   = navigator.share ? 'Share' : 'Copy Share Text';
 
@@ -380,7 +385,7 @@ shareButton.onclick = () => {
   const dogName = document.getElementById('dogName').value.trim();
   if (!dogName) {
     shareError.textContent  = 'Please enter your dog’s name before sharing!';
-    shareError.style.display = 'block';
+    shareError.classList.add('visible');
     return;
   }
 
